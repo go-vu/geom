@@ -2,7 +2,7 @@ package geom
 
 import "fmt"
 
-// THe Size type represents 2D sizes that are composed of a width and height.
+// The Size type represents 2D sizes that are composed of a width and height.
 type Size struct {
 	W float64
 	H float64
