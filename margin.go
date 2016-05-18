@@ -21,79 +21,79 @@ func MakeMargin(dist float64) Margin {
 	}
 }
 
-func (self Margin) TopLeft(point Point) Point {
+func (m Margin) TopLeft(p Point) Point {
 	return Point{
-		X: point.X + self.Left,
-		Y: point.Y + self.Top,
+		X: p.X + m.Left,
+		Y: p.Y + m.Top,
 	}
 }
 
-func (self Margin) BottomRight(point Point) Point {
+func (m Margin) BottomRight(p Point) Point {
 	return Point{
-		X: point.X - self.Right,
-		Y: point.Y - self.Bottom,
+		X: p.X - m.Right,
+		Y: p.Y - m.Bottom,
 	}
 }
 
-func (self Margin) GrowRect(rect Rect) Rect {
+func (m Margin) GrowRect(r Rect) Rect {
 	return Rect{
-		X: rect.X - self.Left,
-		Y: rect.Y - self.Top,
-		W: rect.W + self.Width(),
-		H: rect.H + self.Height(),
+		X: r.X - m.Left,
+		Y: r.Y - m.Top,
+		W: r.W + m.Width(),
+		H: r.H + m.Height(),
 	}
 }
 
-func (self Margin) GrowSize(size Size) Size {
+func (m Margin) GrowSize(s Size) Size {
 	return Size{
-		W: size.W + self.Width(),
-		H: size.H + self.Height(),
+		W: s.W + m.Width(),
+		H: s.H + m.Height(),
 	}
 }
 
-func (self Margin) ShrinkRect(rect Rect) Rect {
-	r := Rect{
-		X: rect.X + self.Left,
-		Y: rect.Y + self.Top,
-		W: rect.W - self.Width(),
-		H: rect.H - self.Height(),
+func (m Margin) ShrinkRect(r Rect) Rect {
+	s := Rect{
+		X: r.X + m.Left,
+		Y: r.Y + m.Top,
+		W: r.W - m.Width(),
+		H: r.H - m.Height(),
 	}
 
-	if r.W < 0 {
-		r.X = rect.X + (rect.W / 2)
-		r.W = 0
+	if s.W < 0 {
+		r.X = r.X + (r.W / 2)
+		s.W = 0
 	}
 
-	if r.H < 0 {
-		r.Y = rect.Y + (rect.H / 2)
-		r.H = 0
+	if s.H < 0 {
+		r.Y = r.Y + (r.H / 2)
+		s.H = 0
 	}
 
-	return r
+	return s
 }
 
-func (self Margin) ShrinkSize(size Size) Size {
+func (m Margin) ShrinkSize(s Size) Size {
 	return Size{
-		W: math.Max(0, size.W-self.Width()),
-		H: math.Max(0, size.H-self.Height()),
+		W: math.Max(0, s.W-m.Width()),
+		H: math.Max(0, s.H-m.Height()),
 	}
 }
 
-func (self Margin) Width() float64 {
-	return self.Left + self.Right
+func (m Margin) Width() float64 {
+	return m.Left + m.Right
 }
 
-func (self Margin) Height() float64 {
-	return self.Top + self.Bottom
+func (m Margin) Height() float64 {
+	return m.Top + m.Bottom
 }
 
-func (self Margin) Size() Size {
+func (m Margin) Size() Size {
 	return Size{
-		W: self.Width(),
-		H: self.Height(),
+		W: m.Width(),
+		H: m.Height(),
 	}
 }
 
-func (self Margin) String() string {
-	return fmt.Sprintf("margins { top = %g, bottom = %g, left = %g, right = %g }", self.Top, self.Bottom, self.Left, self.Right)
+func (m Margin) String() string {
+	return fmt.Sprintf("margins { top = %g, bottom = %g, left = %g, right = %g }", m.Top, m.Bottom, m.Left, m.Right)
 }

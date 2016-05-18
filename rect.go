@@ -21,57 +21,55 @@ func MakeRect(p Point, s Size) Rect {
 	}
 }
 
-func (self *Rect) SetOrigin(p Point) {
-	self.X = p.X
-	self.Y = p.Y
+func (r *Rect) SetOrigin(p Point) {
+	r.X = p.X
+	r.Y = p.Y
 }
 
-func (self *Rect) SetSize(s Size) {
-	self.W = s.W
-	self.H = s.H
+func (r *Rect) SetSize(s Size) {
+	r.W = s.W
+	r.H = s.H
 }
 
-func (self *Rect) Grow(k float64) {
-	self.X -= k
-	self.Y -= k
+func (r *Rect) Grow(k float64) {
+	r.X -= k
+	r.Y -= k
 
 	k += k
 
-	self.W += k
-	self.H += k
+	r.W += k
+	r.H += k
 }
 
-func (self Rect) Origin() Point {
+func (r Rect) Origin() Point {
 	return Point{
-		X: self.X,
-		Y: self.Y,
+		X: r.X,
+		Y: r.Y,
 	}
 }
 
-func (self Rect) Center() Point {
+func (r Rect) Center() Point {
 	return Point{
-		X: self.X + (self.W / 2),
-		Y: self.Y + (self.H / 2),
+		X: r.X + (r.W / 2),
+		Y: r.Y + (r.H / 2),
 	}
 }
 
-func (self Rect) Tip() Point {
+func (r Rect) Tip() Point {
 	return Point{
-		X: self.X + self.W,
-		Y: self.Y + self.H,
+		X: r.X + r.W,
+		Y: r.Y + r.H,
 	}
 }
 
-func (self Rect) Size() Size {
+func (r Rect) Size() Size {
 	return Size{
-		W: self.W,
-		H: self.H,
+		W: r.W,
+		H: r.H,
 	}
 }
 
-func (self Rect) Abs() Rect {
-	r := self
-
+func (r Rect) Abs() Rect {
 	if r.W < 0 {
 		r.X += r.W
 		r.W = -r.W
@@ -85,15 +83,15 @@ func (self Rect) Abs() Rect {
 	return r
 }
 
-func (self Rect) Intersect(r Rect) Rect {
-	r1 := self.Abs()
-	r2 := r.Abs()
+func (r0 Rect) Intersect(r1 Rect) Rect {
+	r0 = r0.Abs()
+	r1 = r1.Abs()
 
-	x1 := math.Max(r1.X, r2.X)
-	y1 := math.Max(r1.Y, r2.Y)
+	x1 := math.Max(r0.X, r1.X)
+	y1 := math.Max(r0.Y, r1.Y)
 
-	x2 := math.Min(r1.X+r1.W, r2.X+r2.W)
-	y2 := math.Min(r1.Y+r1.H, r2.Y+r2.H)
+	x2 := math.Min(r0.X+r0.W, r1.X+r1.W)
+	y2 := math.Min(r0.Y+r0.H, r1.Y+r1.H)
 
 	if x1 > x2 || y1 > y2 {
 		return Rect{}
@@ -107,15 +105,15 @@ func (self Rect) Intersect(r Rect) Rect {
 	}
 }
 
-func (self Rect) Merge(r Rect) Rect {
-	r1 := self.Abs()
-	r2 := r.Abs()
+func (r0 Rect) Merge(r1 Rect) Rect {
+	r0 = r0.Abs()
+	r1 = r1.Abs()
 
-	x1 := math.Min(r1.X, r2.X)
-	y1 := math.Min(r1.Y, r2.Y)
+	x1 := math.Min(r0.X, r1.X)
+	y1 := math.Min(r0.Y, r1.Y)
 
-	x2 := math.Max(r1.X+r1.W, r2.X+r2.W)
-	y2 := math.Max(r1.Y+r1.H, r2.Y+r2.H)
+	x2 := math.Max(r0.X+r0.W, r1.X+r1.W)
+	y2 := math.Max(r0.Y+r0.H, r1.Y+r1.H)
 
 	return Rect{
 		X: x1,
@@ -125,52 +123,52 @@ func (self Rect) Merge(r Rect) Rect {
 	}
 }
 
-func (self Rect) Zero() bool {
-	return self.Origin().Zero() && self.Size().Zero()
+func (r Rect) Zero() bool {
+	return r.Origin().Zero() && r.Size().Zero()
 }
 
-func (self Rect) Empty() bool {
-	return self.Size().Empty()
+func (r Rect) Empty() bool {
+	return r.Size().Empty()
 }
 
-func (self Rect) Area() float64 {
-	return self.Size().Area()
+func (r Rect) Area() float64 {
+	return r.Size().Area()
 }
 
-func (self Rect) ContainsPoint(p Point) bool {
-	return self.X <= p.X && (self.X+self.W) > p.X && self.Y <= p.Y && (self.Y+self.H) > p.Y
+func (r Rect) ContainsPoint(p Point) bool {
+	return r.X <= p.X && (r.X+r.W) > p.X && r.Y <= p.Y && (r.Y+r.H) > p.Y
 }
 
-func (self Rect) ContainsRect(r Rect) bool {
-	return self.X <= r.X && (self.X+self.W) >= (r.X+r.W) && self.Y <= r.Y && (self.Y+self.H) >= (r.Y+r.H)
+func (r0 Rect) ContainsRect(r1 Rect) bool {
+	return r0.X <= r1.X && (r0.X+r0.W) >= (r1.X+r1.W) && r0.Y <= r1.Y && (r0.Y+r0.H) >= (r1.Y+r1.H)
 }
 
-func (self Rect) String() string {
-	return fmt.Sprintf("{ %.6g, %.6g, %.6g, %.6g }", self.X, self.Y, self.W, self.H)
+func (r Rect) String() string {
+	return fmt.Sprintf("{ %.6g, %.6g, %.6g, %.6g }", r.X, r.Y, r.W, r.H)
 }
 
-func (self Rect) Path() Path {
-	return AppendRect(MakePath(5), self)
+func (r Rect) Path() Path {
+	return AppendRect(MakePath(5), r)
 }
 
-func MergeRect(slice []Rect, rect Rect) []Rect {
+func MergeRect(list []Rect, rect Rect) []Rect {
 	// First we check if one of the rectangles in the slice contains the one we
 	// are trying to add. If that's the case there's nothing we need to do, the
 	// rectangle is already contained in the slice.
-	for _, r := range slice {
+	for _, r := range list {
 		if r.ContainsRect(rect) {
-			return slice
+			return list
 		}
 	}
 
 	// Look for rectangles that may intersect with the one we are trying to add,
 	// if one is found we merge them and rebuild the slice in case it created
 	// new intersections.
-	for i, r := range slice {
+	for i, r := range list {
 		if !r.Intersect(rect).Empty() {
-			s := append(make([]Rect, 0, len(slice)), r.Merge(rect))
+			s := append(make([]Rect, 0, len(list)), r.Merge(rect))
 
-			for j, r := range slice {
+			for j, r := range list {
 				if i != j {
 					s = MergeRect(s, r)
 				}
@@ -196,5 +194,5 @@ func MergeRect(slice []Rect, rect Rect) []Rect {
 
 	// If none of the merging policies have matched we simply append it to the
 	// slice.
-	return append(slice, rect)
+	return append(list, rect)
 }

@@ -7,22 +7,22 @@ type Size struct {
 	H float64
 }
 
-func (self Size) Zero() bool {
-	return self.W == 0 && self.H == 0
+func (s Size) Zero() bool {
+	return s.W == 0 && s.H == 0
 }
 
-func (self Size) Empty() bool {
-	return self.W == 0 || self.H == 0
+func (s Size) Empty() bool {
+	return s.W == 0 || s.H == 0
 }
 
-func (self Size) Area() float64 {
-	return self.W * self.H
+func (s Size) Area() float64 {
+	return s.W * s.H
 }
 
-func (self Size) Ratio() float64 {
-	return self.W / self.H
+func (s Size) Ratio() float64 {
+	return s.W / s.H
 }
 
-func (self Size) String() string {
-	return fmt.Sprintf("[%.6g, %.6g]", self.W, self.H)
+func (s Size) String() string {
+	return fmt.Sprintf("[%.6g, %.6g]", s.W, s.H)
 }

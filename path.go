@@ -55,70 +55,70 @@ func AppendPolygon(path Path, points ...Point) Path {
 	return path
 }
 
-func (self *Path) MoveTo(p Point) {
-	self.append(PathElement{
+func (path *Path) MoveTo(p Point) {
+	path.append(PathElement{
 		Type:   MoveTo,
 		Points: [...]Point{p, {}, {}},
 	})
 }
 
-func (self *Path) LineTo(p Point) {
-	self.ensureStartWithMoveTo()
-	self.append(PathElement{
+func (path *Path) LineTo(p Point) {
+	path.ensureStartWithMoveTo()
+	path.append(PathElement{
 		Type:   LineTo,
 		Points: [...]Point{p, {}, {}},
 	})
 }
 
-func (self *Path) QuadCurveTo(c Point, p Point) {
-	self.ensureStartWithMoveTo()
-	self.append(PathElement{
+func (path *Path) QuadCurveTo(c Point, p Point) {
+	path.ensureStartWithMoveTo()
+	path.append(PathElement{
 		Type:   QuadCurveTo,
 		Points: [...]Point{c, p, {}},
 	})
 }
 
-func (self *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
-	self.ensureStartWithMoveTo()
-	self.append(PathElement{
+func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
+	path.ensureStartWithMoveTo()
+	path.append(PathElement{
 		Type:   CubicCurveTo,
 		Points: [...]Point{c1, c2, p},
 	})
 }
 
-func (self *Path) Close() {
-	self.append(PathElement{
+func (path *Path) Close() {
+	path.append(PathElement{
 		Type: ClosePath,
 	})
 }
 
-func (self *Path) Clear() {
-	self.Elements = self.Elements[:0]
+func (path *Path) Clear() {
+	path.Elements = path.Elements[:0]
 }
 
-func (self *Path) Copy() Path {
-	if self.Empty() {
+func (path *Path) Copy() Path {
+	if path.Empty() {
 		return Path{}
 	}
 
 	p := Path{
-		Elements: make([]PathElement, len(self.Elements)),
+		Elements: make([]PathElement, len(path.Elements)),
 	}
 
-	copy(p.Elements, self.Elements)
+	copy(p.Elements, path.Elements)
 	return p
 }
 
-func (self *Path) LastPoint() Point {
-	return self.lastPointAt(len(self.Elements) - 1)
+func (path *Path) LastPoint() Point {
+	return path.lastPointAt(len(path.Elements) - 1)
 }
 
-func (self *Path) lastPointAt(n int) Point {
+func (path *Path) lastPointAt(n int) Point {
 	if n < 0 {
 		return Point{}
 	}
 
-	switch e := self.Elements[n-1]; e.Type {
+	switch e := path.Elements[n-1]; e.Type {
 	case MoveTo, LineTo:
 		return e.Points[0]
 
@@ -129,30 +129,30 @@ func (self *Path) lastPointAt(n int) Point {
 		return e.Points[2]
 
 	default:
-		return self.lastPointAt(n - 1)
+		return path.lastPointAt(n - 1)
 	}
 }
 
-func (self *Path) Empty() bool {
-	return len(self.Elements) == 0
+func (path *Path) Empty() bool {
+	return len(path.Elements) == 0
 }
 
-func (self Path) Path() Path {
-	return self.Copy()
+func (path Path) Path() Path {
+	return path.Copy()
 }
 
-func (self *Path) append(e PathElement) {
-	self.Elements = append(self.Elements, e)
+func (path *Path) append(e PathElement) {
+	path.Elements = append(path.Elements, e)
 }
 
-func (self *Path) ensureStartWithMoveTo() {
-	if n := len(self.Elements); n == 0 {
+func (path *Path) ensureStartWithMoveTo() {
+	if n := len(path.Elements); n == 0 {
 		// Empty paths must start with a MoveTo element.
-		self.MoveTo(Point{})
+		path.MoveTo(Point{})
 
-	} else if self.Elements[n-1].Type == ClosePath {
+	} else if path.Elements[n-1].Type == ClosePath {
 		// When a subpath is closed the path that contains more elements must
 		// be restarted with a MoveTo as well.
-		self.MoveTo(self.LastPoint())
+		path.MoveTo(path.LastPoint())
 	}
 }
