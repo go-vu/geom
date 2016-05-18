@@ -5,6 +5,7 @@ import (
 	"math"
 )
 
+// The Margin type represent 2D margins of a rectangle area.
 type Margin struct {
 	Top    float64
 	Bottom float64
@@ -12,15 +13,19 @@ type Margin struct {
 	Right  float64
 }
 
-func MakeMargin(dist float64) Margin {
+// Makes a new Margin value where every side of a rectangle would be applied the
+// margin value passed as argument.
+func MakeMargin(m float64) Margin {
 	return Margin{
-		Top:    dist,
-		Bottom: dist,
-		Left:   dist,
-		Right:  dist,
+		Top:    m,
+		Bottom: m,
+		Left:   m,
+		Right:  m,
 	}
 }
 
+// Given a point that would be the top-left corner of a rectangle, applies the
+// margin and return the modified coordinates.
 func (m Margin) TopLeft(p Point) Point {
 	return Point{
 		X: p.X + m.Left,
@@ -28,6 +33,8 @@ func (m Margin) TopLeft(p Point) Point {
 	}
 }
 
+// Given a point that would be the bottom-right corner of a rectangle, applies
+// the margin and return the modified corrdinates.
 func (m Margin) BottomRight(p Point) Point {
 	return Point{
 		X: p.X - m.Right,
@@ -35,6 +42,8 @@ func (m Margin) BottomRight(p Point) Point {
 	}
 }
 
+// Grows the given rectangle by applying the margin and returns the modified
+// rectangle.
 func (m Margin) GrowRect(r Rect) Rect {
 	return Rect{
 		X: r.X - m.Left,
@@ -44,6 +53,7 @@ func (m Margin) GrowRect(r Rect) Rect {
 	}
 }
 
+// Grows a size value by applying the margin and returns the modified size.
 func (m Margin) GrowSize(s Size) Size {
 	return Size{
 		W: s.W + m.Width(),
@@ -51,6 +61,8 @@ func (m Margin) GrowSize(s Size) Size {
 	}
 }
 
+// Shrinks the given rectangle by applying the margin and returns the modified
+// rectangle.
 func (m Margin) ShrinkRect(r Rect) Rect {
 	s := Rect{
 		X: r.X + m.Left,
@@ -72,6 +84,7 @@ func (m Margin) ShrinkRect(r Rect) Rect {
 	return s
 }
 
+// Shrinks the given size by applying the margin and returns the modified size.
 func (m Margin) ShrinkSize(s Size) Size {
 	return Size{
 		W: math.Max(0, s.W-m.Width()),
@@ -79,14 +92,17 @@ func (m Margin) ShrinkSize(s Size) Size {
 	}
 }
 
+// Returns the sum of the left and right values of the given margin.
 func (m Margin) Width() float64 {
 	return m.Left + m.Right
 }
 
+// Returns the sum of the top and bottom values of the given margin.
 func (m Margin) Height() float64 {
 	return m.Top + m.Bottom
 }
 
+// Returns the combined width and height of the margin as a size value.
 func (m Margin) Size() Size {
 	return Size{
 		W: m.Width(),
@@ -94,6 +110,7 @@ func (m Margin) Size() Size {
 	}
 }
 
+// Returns a string representation of the margin value.
 func (m Margin) String() string {
 	return fmt.Sprintf("margins { top = %g, bottom = %g, left = %g, right = %g }", m.Top, m.Bottom, m.Left, m.Right)
 }
