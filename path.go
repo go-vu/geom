@@ -27,13 +27,23 @@ const (
 // that must be one of the constant values of PathElementType, and a list of 2D
 // points that are interpreted differently based on the element's type.
 type PathElement struct {
-	Type   PathElementType
+
+	// The type of the path element, see PathElementType for details on what
+	// values this field can take.
+	Type PathElementType
+
+	// The array of points that are arguments to the path operation represented
+	// by this element. Based on the elemen type, one or more of the points are
+	// actually meaningful to set.
 	Points [3]Point
 }
 
 // A Path is a drawable representation of an arbitrary shape, it's copmosed of a
 // list of elements describing each step of the whole drawing operation.
 type Path struct {
+
+	// The list of elements in the path. A program shouldn't have to manipulate
+	// this field and should be considered read-only.
 	Elements []PathElement
 }
 
