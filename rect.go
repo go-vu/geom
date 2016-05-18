@@ -39,8 +39,8 @@ func (r *Rect) SetSize(s Size) {
 	r.H = s.H
 }
 
-// The Grow method modifies the origin and dimensions of the rectangle it is
-// called on by the value passed as argument.
+// Grow modifies the origin and dimensions of the rectangle it is called on by
+// the value passed as argument.
 func (r *Rect) Grow(k float64) {
 	r.X -= k
 	r.Y -= k
@@ -83,9 +83,9 @@ func (r Rect) Size() Size {
 	}
 }
 
-// The Abs method transforms returns a rectangle equivalent to the one it is
-// called on where negative components of the dimensions have been converted
-// to positive values.
+// Abs transforms returns a rectangle equivalent to the one it is called on
+// where negative components of the dimensions have been converted to positive
+// values.
 func (r Rect) Abs() Rect {
 	if r.W < 0 {
 		r.X += r.W
@@ -100,20 +100,20 @@ func (r Rect) Abs() Rect {
 	return r
 }
 
-// The Intersect method computes the intersection of the rectangle it's called
-// on with the one passed as argument, returning the result.
+// Intersect computes the intersection of the rectangle it's called on with the
+// one passed as argument, returning the result.
 //
 // The intersection is the area that is covered by both rectangles, which may be
 // a zero-value if the two don't overlap.
-func (r0 Rect) Intersect(r1 Rect) Rect {
-	r0 = r0.Abs()
+func (r Rect) Intersect(r1 Rect) Rect {
+	r = r.Abs()
 	r1 = r1.Abs()
 
-	x1 := math.Max(r0.X, r1.X)
-	y1 := math.Max(r0.Y, r1.Y)
+	x1 := math.Max(r.X, r1.X)
+	y1 := math.Max(r.Y, r1.Y)
 
-	x2 := math.Min(r0.X+r0.W, r1.X+r1.W)
-	y2 := math.Min(r0.Y+r0.H, r1.Y+r1.H)
+	x2 := math.Min(r.X+r.W, r1.X+r1.W)
+	y2 := math.Min(r.Y+r.H, r1.Y+r1.H)
 
 	if x1 > x2 || y1 > y2 {
 		return Rect{}
@@ -127,17 +127,17 @@ func (r0 Rect) Intersect(r1 Rect) Rect {
 	}
 }
 
-// The Merge method computes and returns the smallest rectangle that includes
-// both the one it is called on and the one passed as argument.
-func (r0 Rect) Merge(r1 Rect) Rect {
-	r0 = r0.Abs()
+// Merge computes and returns the smallest rectangle that includes both the one
+// it is called on and the one passed as argument.
+func (r Rect) Merge(r1 Rect) Rect {
+	r = r.Abs()
 	r1 = r1.Abs()
 
-	x1 := math.Min(r0.X, r1.X)
-	y1 := math.Min(r0.Y, r1.Y)
+	x1 := math.Min(r.X, r1.X)
+	y1 := math.Min(r.Y, r1.Y)
 
-	x2 := math.Max(r0.X+r0.W, r1.X+r1.W)
-	y2 := math.Max(r0.Y+r0.H, r1.Y+r1.H)
+	x2 := math.Max(r.X+r.W, r1.X+r1.W)
+	y2 := math.Max(r.Y+r.H, r1.Y+r1.H)
 
 	return Rect{
 		X: x1,
@@ -147,19 +147,18 @@ func (r0 Rect) Merge(r1 Rect) Rect {
 	}
 }
 
-// The Zero method checks whether the rectangle it is called on is the
-// zero-value.
+// Zero checks whether the rectangle it is called on is the zero-value.
 func (r Rect) Zero() bool {
 	return r.Origin().Zero() && r.Size().Zero()
 }
 
-// The Empty method checks whether the rectangle is empty, which means it has a
-// zero area.
+// Empty method checks whether the rectangle is empty, which means it has a zero
+// area.
 func (r Rect) Empty() bool {
 	return r.Size().Empty()
 }
 
-// The Area method computes and returns the area of the rectangle it is called on
+// Area computes and returns the area of the rectangle it is called on
 // (width x height).
 func (r Rect) Area() float64 {
 	return r.Size().Area()
@@ -173,8 +172,8 @@ func (r Rect) ContainsPoint(p Point) bool {
 
 // ContainsRect checks whether the rectangle passed as argument is contained in
 // the one it's called on, returning true when that's the case, false otherwise.
-func (r0 Rect) ContainsRect(r1 Rect) bool {
-	return r0.X <= r1.X && (r0.X+r0.W) >= (r1.X+r1.W) && r0.Y <= r1.Y && (r0.Y+r0.H) >= (r1.Y+r1.H)
+func (r Rect) ContainsRect(r1 Rect) bool {
+	return r.X <= r1.X && (r.X+r.W) >= (r1.X+r1.W) && r.Y <= r1.Y && (r.Y+r.H) >= (r1.Y+r1.H)
 }
 
 // The String method returns a human-readable representation of the rectangle.
@@ -182,8 +181,8 @@ func (r Rect) String() string {
 	return fmt.Sprintf("{ %.6g, %.6g, %.6g, %.6g }", r.X, r.Y, r.W, r.H)
 }
 
-// The Path method satisfies the Shape interface, allowing Rect values to be
-// used with programs that manipulate shapes.
+// Path satisfies the Shape interface, allowing Rect values to be used with
+// programs that manipulate shapes.
 func (r Rect) Path() Path {
 	return AppendRect(MakePath(5), r)
 }
