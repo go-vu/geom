@@ -2,22 +2,28 @@ package geom
 
 import "fmt"
 
+// The Point type represents 2D coordinates.
 type Point struct {
 	X float64
 	Y float64
 }
 
-func (self Point) Zero() bool {
-	return self.X == 0 && self.Y == 0
+// The Zero method checks if the receiver has the zero-value (both the x and y
+// components are zero).
+func (p Point) Zero() bool {
+	return p.X == 0 && p.Y == 0
 }
 
-func (self Point) String() string {
-	return fmt.Sprintf("(%.6g, %.6g)", self.X, self.Y)
+// The String method returns a human-readable representation of the point value.
+func (p Point) String() string {
+	return fmt.Sprintf("(%.6g, %.6g)", p.X, p.Y)
 }
 
-func (self Point) WithOrigin(origin Point) Point {
+// WithOrigin translate the receiver to a coordinate system with origin given as
+// argument and returns the modified point.
+func (p Point) WithOrigin(origin Point) Point {
 	return Point{
-		X: self.X - origin.X,
-		Y: self.Y - origin.Y,
+		X: p.X - origin.X,
+		Y: p.Y - origin.Y,
 	}
 }
