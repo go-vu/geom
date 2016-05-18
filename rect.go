@@ -194,7 +194,7 @@ func (r Rect) Path() Path {
 // added if another rectangel in the list already contains the one passed as
 // argument for example. A program should consider the list of rectangles passed
 // to and returned by the function as the optimal list of rectangle that would
-// contain all the merged rectangles. This is particulary useful when keeping
+// contain all the merged rectangles. This is particularly useful when keeping
 // track of 'dirty' areas in a way that would minimize the 'dirty' surface.
 func MergeRect(list []Rect, rect Rect) []Rect {
 	// First we check if one of the rectangles in the slice contains the one we
