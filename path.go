@@ -82,8 +82,7 @@ func AppendPath(path Path, other Path) Path {
 //
 //	path = AppendPath(path, rect.Path())
 //
-// but the implementation is more optimized and avoid unnecessary memory
-// allocations.
+// but the implementation is optimized to avoid unnecessary memory allocations.
 func AppendRect(path Path, rect Rect) Path {
 	x0 := rect.X
 	y0 := rect.Y
