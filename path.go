@@ -1,5 +1,7 @@
 package geom
 
+// PathElementType is an enumeration representing the different kinds of path
+// elements supported by 2D paths.
 type PathElementType int
 
 const (
@@ -10,29 +12,57 @@ const (
 	ClosePath
 )
 
+// A PathElement represents a single step in a 2D path, it's composed of a type
+// that must be one of the constant values of PathElementType, and a list of 2D
+// points that are interpreted differently based on the element's type.
 type PathElement struct {
 	Type   PathElementType
 	Points [3]Point
 }
 
+// A Path is a drawable representation of an arbitrary shape, it's copmosed of a
+// list of elements describing each step of the whole drawing operation.
 type Path struct {
 	Elements []PathElement
 }
 
+// The Shape interface represents values that can be converted to 2D paths.
 type Shape interface {
+
+	// Returns a 2D path representing the abstract shape that satisifed the
+	// interface.
+	//
+	// The returned path shouldn't be retained by the shape or any other part
+	// of the program, the caller of that method is considered the owner of the
+	// returned value and is free to modify it.
 	Path() Path
 }
 
+// MakePath returns a Path value initialized with a slice of elements with the
+// capacity given as argument.
 func MakePath(cap int) Path {
 	return Path{
 		Elements: make([]PathElement, 0, cap),
 	}
 }
 
+// AppendPath concatenates the Path given as second arugment to the one given as
+// first argument. It behaves in a similar way to the builtin `append` function,
+// the Path value given as first argument may or may not be modified by the append
+// operation.
 func AppendPath(path Path, other Path) Path {
 	return Path{Elements: append(path.Elements, other.Elements...)}
 }
 
+// AppendRect efficiently append a rectangle to a Path and returns the modified
+// value.
+//
+// Calling this function is equivalent to calling:
+//
+//	path = AppendPath(path, rect.Path())
+//
+// but the implementation is more optimized and avoid unnecessary memory
+// allocations.
 func AppendRect(path Path, rect Rect) Path {
 	x0 := rect.X
 	y0 := rect.Y
@@ -41,6 +71,8 @@ func AppendRect(path Path, rect Rect) Path {
 	return AppendPolygon(path, Point{x0, y0}, Point{x1, y0}, Point{x1, y1}, Point{x0, y1})
 }
 
+// AppendPolygon appends an arbitrary polygon to a path and returns the modified
+// value, the polygon is made of the points given as arguments to the function.
 func AppendPolygon(path Path, points ...Point) Path {
 	if len(points) != 0 {
 		path.MoveTo(points[0])
@@ -55,6 +87,8 @@ func AppendPolygon(path Path, points ...Point) Path {
 	return path
 }
 
+// The MoveTo method appends a path element that moves the current path position
+// to the point given as argument.
 func (path *Path) MoveTo(p Point) {
 	path.append(PathElement{
 		Type:   MoveTo,
@@ -62,6 +96,8 @@ func (path *Path) MoveTo(p Point) {
 	})
 }
 
+// The LineTo method appends a path element that draws a line from the current
+// path position to the point given as argument.
 func (path *Path) LineTo(p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -70,6 +106,8 @@ func (path *Path) LineTo(p Point) {
 	})
 }
 
+// The QuadCurveTo method appends a path element that draws a quadriatic curve
+// from the current path position to `p` and centered in `c`.
 func (path *Path) QuadCurveTo(c Point, p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -78,6 +116,8 @@ func (path *Path) QuadCurveTo(c Point, p Point) {
 	})
 }
 
+// The QuadCurveTo method appends a path element that draws a cubic curve from
+// the current path position to `p` with centers in `c1` and `c2`.
 func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -86,16 +126,23 @@ func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
 	})
 }
 
+// The Close method appends a path element that closes the current shape by
+// drawing a line between the current path position and the last move-to element
+// added to the path.
 func (path *Path) Close() {
 	path.append(PathElement{
 		Type: ClosePath,
 	})
 }
 
+// The Clear method erases every element in the path.
 func (path *Path) Clear() {
 	path.Elements = path.Elements[:0]
 }
 
+// The Copy method creates a copy of the path and returns it, the returned value
+// and the receiver do not share the same slice of elements and can be safely
+// modified independently.
 func (path *Path) Copy() Path {
 	if path.Empty() {
 		return Path{}
@@ -109,6 +156,7 @@ func (path *Path) Copy() Path {
 	return p
 }
 
+// The LastPoint method returns the 2D coordinates of the current path position.
 func (path *Path) LastPoint() Point {
 	return path.lastPointAt(len(path.Elements) - 1)
 }
@@ -133,10 +181,13 @@ func (path *Path) lastPointAt(n int) Point {
 	}
 }
 
+// The Empty checks checks if the path is empty, which means it has no element.
 func (path *Path) Empty() bool {
 	return len(path.Elements) == 0
 }
 
+// The Path method satisfies the Shape interface by returning a copy of the path
+// it is called on.
 func (path Path) Path() Path {
 	return path.Copy()
 }
