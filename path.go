@@ -13,7 +13,7 @@ const (
 	// location while drawin a straight line.
 	LineTo
 
-	// QuandCurveTo is used for path elements that draw a quadriatic cruve.
+	// QuadCurveTo is used for path elements that draw a quadriatic cruve.
 	QuadCurveTo
 
 	// CubicCurveTo is used for path elements that draw a cubic curve.
@@ -127,7 +127,7 @@ func (path *Path) QuadCurveTo(c Point, p Point) {
 	})
 }
 
-// QuadCurveTo appends a path element that draws a cubic curve from the current
+// CubicCurveTo appends a path element that draws a cubic curve from the current
 // path position to `p` with centers in `c1` and `c2`.
 func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
 	path.ensureStartWithMoveTo()
