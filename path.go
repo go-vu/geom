@@ -5,10 +5,21 @@ package geom
 type PathElementType int
 
 const (
+	// MoveTo is used for path elements that move the path position to a new
+	// location.
 	MoveTo PathElementType = iota
+
+	// LineTo is used for path elements that move the path position to a new
+	// location while drawin a straight line.
 	LineTo
+
+	// QuandCurveTo is used for path elements that draw a quadriatic cruve.
 	QuadCurveTo
+
+	// CubicCurveTo is used for path elements that draw a cubic curve.
 	CubicCurveTo
+
+	// ClosePath is used for path elements that terminate drawing of a sub-path.
 	ClosePath
 )
 
@@ -87,8 +98,8 @@ func AppendPolygon(path Path, points ...Point) Path {
 	return path
 }
 
-// The MoveTo method appends a path element that moves the current path position
-// to the point given as argument.
+// MoveTo appends a path element that moves the current path position to the
+// point given as argument.
 func (path *Path) MoveTo(p Point) {
 	path.append(PathElement{
 		Type:   MoveTo,
@@ -96,8 +107,8 @@ func (path *Path) MoveTo(p Point) {
 	})
 }
 
-// The LineTo method appends a path element that draws a line from the current
-// path position to the point given as argument.
+// LineTo appends a path element that draws a line from the current path
+// position to the point given as argument.
 func (path *Path) LineTo(p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -106,8 +117,8 @@ func (path *Path) LineTo(p Point) {
 	})
 }
 
-// The QuadCurveTo method appends a path element that draws a quadriatic curve
-// from the current path position to `p` and centered in `c`.
+// QuadCurveTo appends a path element that draws a quadriatic curve from the
+// current path position to `p` and centered in `c`.
 func (path *Path) QuadCurveTo(c Point, p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -116,8 +127,8 @@ func (path *Path) QuadCurveTo(c Point, p Point) {
 	})
 }
 
-// The QuadCurveTo method appends a path element that draws a cubic curve from
-// the current path position to `p` with centers in `c1` and `c2`.
+// QuadCurveTo appends a path element that draws a cubic curve from the current
+// path position to `p` with centers in `c1` and `c2`.
 func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
 	path.ensureStartWithMoveTo()
 	path.append(PathElement{
@@ -126,23 +137,23 @@ func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
 	})
 }
 
-// The Close method appends a path element that closes the current shape by
-// drawing a line between the current path position and the last move-to element
-// added to the path.
+// Close appends a path element that closes the current shape by drawing a line
+// between the current path position and the last move-to element added to the
+// path.
 func (path *Path) Close() {
 	path.append(PathElement{
 		Type: ClosePath,
 	})
 }
 
-// The Clear method erases every element in the path.
+// Clear erases every element in the path.
 func (path *Path) Clear() {
 	path.Elements = path.Elements[:0]
 }
 
-// The Copy method creates a copy of the path and returns it, the returned value
-// and the receiver do not share the same slice of elements and can be safely
-// modified independently.
+// Copy creates a copy of the path and returns it, the returned value and the
+// receiver do not share the same slice of elements and can be safely modified
+// independently.
 func (path *Path) Copy() Path {
 	if path.Empty() {
 		return Path{}
@@ -156,7 +167,7 @@ func (path *Path) Copy() Path {
 	return p
 }
 
-// The LastPoint method returns the 2D coordinates of the current path position.
+// LastPoint returns the 2D coordinates of the current path position.
 func (path *Path) LastPoint() Point {
 	return path.lastPointAt(len(path.Elements) - 1)
 }
@@ -181,13 +192,13 @@ func (path *Path) lastPointAt(n int) Point {
 	}
 }
 
-// The Empty checks checks if the path is empty, which means it has no element.
+// Empty checks if the path is empty, which means it has no element.
 func (path *Path) Empty() bool {
 	return len(path.Elements) == 0
 }
 
-// The Path method satisfies the Shape interface by returning a copy of the path
-// it is called on.
+// Path satisfies the Shape interface by returning a copy of the path it is
+// called on.
 func (path Path) Path() Path {
 	return path.Copy()
 }
