@@ -27,7 +27,6 @@ const (
 // that must be one of the constant values of PathElementType, and a list of 2D
 // points that are interpreted differently based on the element's type.
 type PathElement struct {
-
 	// The type of the path element, see PathElementType for details on what
 	// values this field can take.
 	Type PathElementType
@@ -41,7 +40,6 @@ type PathElement struct {
 // A Path is a drawable representation of an arbitrary shape, it's copmosed of a
 // list of elements describing each step of the whole drawing operation.
 type Path struct {
-
 	// The list of elements in the path. A program shouldn't have to manipulate
 	// this field and should be considered read-only.
 	Elements []PathElement
@@ -49,7 +47,6 @@ type Path struct {
 
 // The Shape interface represents values that can be converted to 2D paths.
 type Shape interface {
-
 	// Returns a 2D path representing the abstract shape that satisifed the
 	// interface.
 	//
