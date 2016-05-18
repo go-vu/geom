@@ -8,8 +8,8 @@ type Point struct {
 	Y float64
 }
 
-// The Zero method checks if the receiver has the zero-value (both the x and y
-// components are zero).
+// Zero method if the receiver has the zero-value (both the x and y components
+// are zero).
 func (p Point) Zero() bool {
 	return p.X == 0 && p.Y == 0
 }
