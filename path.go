@@ -106,84 +106,84 @@ func AppendPolygon(path Path, points ...Point) Path {
 
 // MoveTo appends a path element that moves the current path position to the
 // point given as argument.
-func (path *Path) MoveTo(p Point) {
-	path.append(PathElement{
+func (p *Path) MoveTo(pt Point) {
+	p.append(PathElement{
 		Type:   MoveTo,
-		Points: [...]Point{p, {}, {}},
+		Points: [...]Point{pt, {}, {}},
 	})
 }
 
 // LineTo appends a path element that draws a line from the current path
 // position to the point given as argument.
-func (path *Path) LineTo(p Point) {
-	path.ensureStartWithMoveTo()
-	path.append(PathElement{
+func (p *Path) LineTo(pt Point) {
+	p.ensureStartWithMoveTo()
+	p.append(PathElement{
 		Type:   LineTo,
-		Points: [...]Point{p, {}, {}},
+		Points: [...]Point{pt, {}, {}},
 	})
 }
 
 // QuadCurveTo appends a path element that draws a quadriatic curve from the
-// current path position to `p` and centered in `c`.
-func (path *Path) QuadCurveTo(c Point, p Point) {
-	path.ensureStartWithMoveTo()
-	path.append(PathElement{
+// current path position to `pt` and centered in `c`.
+func (p *Path) QuadCurveTo(c Point, pt Point) {
+	p.ensureStartWithMoveTo()
+	p.append(PathElement{
 		Type:   QuadCurveTo,
-		Points: [...]Point{c, p, {}},
+		Points: [...]Point{c, pt, {}},
 	})
 }
 
 // CubicCurveTo appends a path element that draws a cubic curve from the current
-// path position to `p` with centers in `c1` and `c2`.
-func (path *Path) CubicCurveTo(c1 Point, c2 Point, p Point) {
-	path.ensureStartWithMoveTo()
-	path.append(PathElement{
+// path position to `pt` with centers in `c1` and `c2`.
+func (p *Path) CubicCurveTo(c1 Point, c2 Point, pt Point) {
+	p.ensureStartWithMoveTo()
+	p.append(PathElement{
 		Type:   CubicCurveTo,
-		Points: [...]Point{c1, c2, p},
+		Points: [...]Point{c1, c2, pt},
 	})
 }
 
 // Close appends a path element that closes the current shape by drawing a line
 // between the current path position and the last move-to element added to the
 // path.
-func (path *Path) Close() {
-	path.append(PathElement{
+func (p *Path) Close() {
+	p.append(PathElement{
 		Type: ClosePath,
 	})
 }
 
 // Clear erases every element in the path.
-func (path *Path) Clear() {
-	path.Elements = path.Elements[:0]
+func (p *Path) Clear() {
+	p.Elements = p.Elements[:0]
 }
 
 // Copy creates a copy of the path and returns it, the returned value and the
 // receiver do not share the same slice of elements and can be safely modified
 // independently.
-func (path *Path) Copy() Path {
-	if path.Empty() {
+func (p *Path) Copy() Path {
+	if p.Empty() {
 		return Path{}
 	}
 
-	p := Path{
-		Elements: make([]PathElement, len(path.Elements)),
+	p1 := Path{
+		Elements: make([]PathElement, len(p.Elements)),
 	}
 
-	copy(p.Elements, path.Elements)
-	return p
+	copy(p1.Elements, p.Elements)
+	return p1
 }
 
 // LastPoint returns the 2D coordinates of the current path position.
-func (path *Path) LastPoint() Point {
-	return path.lastPointAt(len(path.Elements) - 1)
+func (p *Path) LastPoint() Point {
+	return p.lastPointAt(len(p.Elements) - 1)
 }
 
-func (path *Path) lastPointAt(n int) Point {
+func (p *Path) lastPointAt(n int) Point {
 	if n < 0 {
 		return Point{}
 	}
 
-	switch e := path.Elements[n-1]; e.Type {
+	switch e := p.Elements[n-1]; e.Type {
 	case MoveTo, LineTo:
 		return e.Points[0]
 
@@ -194,33 +194,33 @@ func (path *Path) lastPointAt(n int) Point {
 		return e.Points[2]
 
 	default:
-		return path.lastPointAt(n - 1)
+		return p.lastPointAt(n - 1)
 	}
 }
 
 // Empty checks if the path is empty, which means it has no element.
-func (path *Path) Empty() bool {
-	return len(path.Elements) == 0
+func (p *Path) Empty() bool {
+	return len(p.Elements) == 0
 }
 
 // Path satisfies the Shape interface by returning a copy of the path it is
 // called on.
-func (path Path) Path() Path {
-	return path.Copy()
+func (p Path) Path() Path {
+	return p.Copy()
 }
 
-func (path *Path) append(e PathElement) {
-	path.Elements = append(path.Elements, e)
+func (p *Path) append(e PathElement) {
+	p.Elements = append(p.Elements, e)
 }
 
-func (path *Path) ensureStartWithMoveTo() {
-	if n := len(path.Elements); n == 0 {
+func (p *Path) ensureStartWithMoveTo() {
+	if n := len(p.Elements); n == 0 {
 		// Empty paths must start with a MoveTo element.
-		path.MoveTo(Point{})
+		p.MoveTo(Point{})
 
-	} else if path.Elements[n-1].Type == ClosePath {
+	} else if p.Elements[n-1].Type == ClosePath {
 		// When a subpath is closed the path that contains more elements must
 		// be restarted with a MoveTo as well.
-		path.MoveTo(path.LastPoint())
+		p.MoveTo(p.LastPoint())
 	}
 }
