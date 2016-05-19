@@ -1,9 +1,6 @@
 package geom
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
 // The Margin type represent 2D margins of a rectangle area.
 type Margin struct {
@@ -85,15 +82,6 @@ func (m Margin) ShrinkRect(r Rect) Rect {
 	return s
 }
 
-// ShrinkSize shrinks the given size by applying the margin and returns the
-// modified size.
-func (m Margin) ShrinkSize(s Size) Size {
-	return Size{
-		W: math.Max(0, s.W-m.Width()),
-		H: math.Max(0, s.H-m.Height()),
-	}
-}
-
 // Width returns the sum of the left and right values of the given margin.
 func (m Margin) Width() float64 {
 	return m.Left + m.Right
@@ -114,5 +102,5 @@ func (m Margin) Size() Size {
 
 // The String method returns a string representation of the margin value.
 func (m Margin) String() string {
-	return fmt.Sprintf("margins { top = %g, bottom = %g, left = %g, right = %g }", m.Top, m.Bottom, m.Left, m.Right)
+	return fmt.Sprintf("margin { top = %g, bottom = %g, left = %g, right = %g }", m.Top, m.Bottom, m.Left, m.Right)
 }
