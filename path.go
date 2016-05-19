@@ -183,7 +183,7 @@ func (p *Path) lastPointAt(n int) Point {
 		return Point{}
 	}
 
-	switch e := p.Elements[n-1]; e.Type {
+	switch e := p.Elements[n]; e.Type {
 	case MoveTo, LineTo:
 		return e.Points[0]
 

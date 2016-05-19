@@ -39,18 +39,6 @@ func (r *Rect) SetSize(s Size) {
 	r.H = s.H
 }
 
-// Grow modifies the origin and dimensions of the rectangle it is called on by
-// the value passed as argument.
-func (r *Rect) Grow(k float64) {
-	r.X -= k
-	r.Y -= k
-
-	k += k
-
-	r.W += k
-	r.H += k
-}
-
 // Origin returns the current origin of the rectangle as a Point value.
 func (r Rect) Origin() Point {
 	return Point{
@@ -185,6 +173,17 @@ func (r Rect) String() string {
 // programs that manipulate shapes.
 func (r Rect) Path() Path {
 	return AppendRect(MakePath(5), r)
+}
+
+// CenterRect computes and returns a Rect value which represents the `inner`
+// rectangle centered in the `outer` rectangle.
+func CenterRect(outer Rect, inner Rect) Rect {
+	return Rect{
+		X: outer.X + ((outer.W / 2) - (inner.W / 2)),
+		Y: outer.Y + ((outer.H / 2) - (inner.H / 2)),
+		W: inner.W,
+		H: inner.H,
+	}
 }
 
 // MergeRect merges a rectangle into an existing list of other rectangles,
