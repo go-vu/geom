@@ -8,4 +8,5 @@ install:
   - go install github.com/mattn/goveralls
 
 script:
+  - go test -v -cover
   - goveralls -service=travis-ci
