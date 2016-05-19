@@ -207,23 +207,23 @@ func TestPathEnsureMoveToAfterClosePath(t *testing.T) {
 
 	if !reflect.DeepEqual(p, Path{
 		Elements: []PathElement{
-			PathElement{
+			{
 				Type:   MoveTo,
 				Points: [...]Point{{}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   LineTo,
 				Points: [...]Point{{1, 1}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   ClosePath,
 				Points: [...]Point{{}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   MoveTo,
 				Points: [...]Point{{1, 1}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   LineTo,
 				Points: [...]Point{{1, 0}, {}, {}},
 			},
@@ -244,19 +244,19 @@ func TestAppendPath(t *testing.T) {
 
 	if !reflect.DeepEqual(p1, Path{
 		Elements: []PathElement{
-			PathElement{
+			{
 				Type:   MoveTo,
 				Points: [...]Point{{}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   LineTo,
 				Points: [...]Point{{1, 1}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   MoveTo,
 				Points: [...]Point{{}, {}, {}},
 			},
-			PathElement{
+			{
 				Type:   LineTo,
 				Points: [...]Point{{2, 2}, {}, {}},
 			},
