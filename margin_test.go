@@ -89,6 +89,16 @@ func TestMarginShrinkRect(t *testing.T) {
 	}
 }
 
+func TestMarginShrinkRectEmpty(t *testing.T) {
+	m := MakeMargin(2)
+	r := m.ShrinkRect(Rect{W: 2, H: 2})
+
+	if r != (Rect{X: 1, Y: 1}) {
+		t.Error("margin shrinking rectangle produced an invalid value:", m, r)
+	}
+
+}
+
 func TestMarginWidth(t *testing.T) {
 	m := MakeMargin(0.25)
 	w := m.Width()

@@ -50,15 +50,6 @@ func (m Margin) GrowRect(r Rect) Rect {
 	}
 }
 
-// GrowSize grows a size value by applying the margin and returns the modified
-// size.
-func (m Margin) GrowSize(s Size) Size {
-	return Size{
-		W: s.W + m.Width(),
-		H: s.H + m.Height(),
-	}
-}
-
 // ShrinkRect shrinks the given rectangle by applying the margin and returns the
 // modified rectangle.
 func (m Margin) ShrinkRect(r Rect) Rect {
@@ -70,12 +61,12 @@ func (m Margin) ShrinkRect(r Rect) Rect {
 	}
 
 	if s.W < 0 {
-		r.X = r.X + (r.W / 2)
+		s.X = r.X + (r.W / 2)
 		s.W = 0
 	}
 
 	if s.H < 0 {
-		r.Y = r.Y + (r.H / 2)
+		s.Y = r.Y + (r.H / 2)
 		s.H = 0
 	}
 
