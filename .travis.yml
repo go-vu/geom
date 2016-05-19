@@ -4,6 +4,7 @@ go:
   - 1.6
 
 install:
+  - go get -v -t .
   - go get github.com/mattn/goveralls
   - go install github.com/mattn/goveralls
 
